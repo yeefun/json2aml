@@ -7,7 +7,7 @@
     "dev": "node build.js",
     "build": "cross-env NODE_ENV=production node build.js",
     "postbuild": "cp index.html dist/index.html",
-    "test": "jest --watch"
+    "test": "jest"
   },
   "dependencies": {
     "clipboard-copy": "^4.0.1",
