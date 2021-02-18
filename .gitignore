@@ -117,3 +117,4 @@ dist
 
 index.css
 index.js
+!src/*

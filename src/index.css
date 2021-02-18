@@ -1,0 +1,74 @@
+@import 'reset-css';
+@import 'codemirror/lib/codemirror.css';
+
+body {
+  line-height: 1.5;
+  font-size: 16px;
+  font-family: 'Inconsolata', monospace;
+  color: #fff;
+  background-color: #202020;
+  padding: 0 24px;
+}
+
+.title {
+  font-size: 5vh;
+  padding-top: 5vh;
+  text-align: center;
+  font-weight: 700;
+  line-height: 1;
+  font-family: 'Arvo', serif;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  border-radius: 2px;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.container button {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+}
+
+.editor {
+  width: 50%;
+  overflow: hidden;
+}
+
+#json-editor {
+  border-radius: 2px 0 0 2px;
+}
+
+#aml-editor {
+  border-radius: 0 2px 2px 0;
+}
+
+.CodeMirror {
+  height: 80vh;
+  font-family: 'Inconsolata', monospace;
+}
+
+a {
+  cursor: pointer;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh;
+}
+
+footer a {
+  color: #fff;
+}
