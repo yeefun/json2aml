@@ -1,5 +1,5 @@
 {
-  "name": "json-2-archieml",
+  "name": "json2aml",
   "version": "0.1.0",
   "description": "Convert JSON to ArchieML",
   "author": "Yeefun Lin <szyeefun@gmail.com> (https://yeefun.github.io/)",
