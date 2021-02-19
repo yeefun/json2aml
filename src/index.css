@@ -23,6 +23,7 @@ body {
   display: flex;
   align-items: center;
   max-width: 1000px;
+  height: 80vh;
   margin: 0 auto;
   position: relative;
   border-radius: 2px;
@@ -42,6 +43,7 @@ button {
 
 .editor {
   width: 50%;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -54,8 +56,8 @@ button {
 }
 
 .CodeMirror {
-  height: 80vh;
   font-family: 'Inconsolata', monospace;
+  height: 100%;
 }
 
 a {
