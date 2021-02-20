@@ -31,9 +31,9 @@ function toAml(object = {}, { shouldReturnWarnings = false } = {}) {
     if (isArray(root)) {
       if (isArray(parent)) {
         throw new TypeError(
-          `ArchieML does not support array of arrays: ${JSON.stringify([
-            root,
-          ])}.`
+          `[json2aml error] ArchieML does not support array of arrays: ${JSON.stringify(
+            [root]
+          )}.`
         );
       }
 

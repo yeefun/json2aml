@@ -28,10 +28,12 @@ CodeMirror.registerHelper('lint', 'json', function lintJson(text) {
     );
   } catch (err) {
     console.error(err);
+
+    const message = err.message.replace(/^JSON5:/, '[JSON5 error]');
     found.push({
       from: beginning,
       to: beginning,
-      message: `${err.name}: ${err.message}`,
+      message,
     });
   }
 
