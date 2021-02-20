@@ -1,11 +1,20 @@
-function toAml(object = {}) {
+function toAml(object = {}, { shouldReturnWarnings = false } = {}) {
   const firstArrayInOutermostKey = {
     wasIterated: false,
     wasSet: false,
   };
+  const warnings = [];
 
   function build(root = {}, parent, nestedKeys = [], isFreeformType = false) {
     if (isLiteral(root)) {
+      if (!isString(root)) {
+        const message = `[json2aml warn]: ArchieML always stores values in the output as strings. A ${capitalize(
+          typeof root
+        )} ${root} is converted to a String "${String(root)}".`;
+        console.warn(message);
+        warnings.push(message);
+      }
+
       if (isArray(parent)) {
         return {
           tag: 'string',
@@ -143,6 +152,10 @@ function toAml(object = {}) {
     }
   }
 
+  if (shouldReturnWarnings) {
+    return [build(object), warnings];
+  }
+
   return build(object);
 }
 
@@ -172,12 +185,20 @@ function isArray(elem) {
   return Array.isArray(elem);
 }
 
+function isString(elem) {
+  return typeof elem === 'string';
+}
+
 function isLiteral(elem) {
   return !isObject(elem) && !isArray(elem);
 }
 
 function isEmptyObject(elem) {
   return isObject(elem) && Object.keys(elem).length <= 0;
+}
+
+function capitalize(str = '') {
+  return `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
 }
 
 export default toAml;

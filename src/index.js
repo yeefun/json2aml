@@ -11,15 +11,26 @@ import toAml from './to-aml.js';
 
 CodeMirror.registerHelper('lint', 'json', function lintJson(text) {
   const found = [];
+  const beginning = CodeMirror.Pos(0, 0);
 
   try {
     const object = json5_parse(text);
-    toAml(object);
+    const [, warnings] = toAml(object, { shouldReturnWarnings: true });
+    found.push(
+      ...warnings.map(function buildProblem(message) {
+        return {
+          from: beginning,
+          to: beginning,
+          severity: 'warning',
+          message,
+        };
+      })
+    );
   } catch (err) {
     console.error(err);
     found.push({
-      from: CodeMirror.Pos(0, 0),
-      to: CodeMirror.Pos(0, 0),
+      from: beginning,
+      to: beginning,
       message: `${err.name}: ${err.message}`,
     });
   }

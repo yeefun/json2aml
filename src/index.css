@@ -60,6 +60,10 @@ button {
   height: 100%;
 }
 
+.CodeMirror-lint-tooltip {
+  font-family: 'Inconsolata', monospace;
+}
+
 a {
   cursor: pointer;
 }
