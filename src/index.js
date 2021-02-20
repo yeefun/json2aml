@@ -1,11 +1,31 @@
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/javascript/javascript.js';
 import 'codemirror/addon/edit/closebrackets.js';
+import 'codemirror/addon/lint/lint.js';
+import 'codemirror/addon/lint/lint.css';
 import { parse as json5Parse } from 'json5';
 import clipboardCopy from 'clipboard-copy';
 
 import './index.css';
 import toAml from './to-aml.js';
+
+CodeMirror.registerHelper('lint', 'json', function lintJson(text) {
+  const found = [];
+
+  try {
+    const object = json5Parse(text);
+    toAml(object);
+  } catch (err) {
+    console.error(err);
+    found.push({
+      from: CodeMirror.Pos(0, 0),
+      to: CodeMirror.Pos(0, 0),
+      message: `${err.name}: ${err.message}`,
+    });
+  }
+
+  return found;
+});
 
 const jsonEditor = CodeMirror(document.getElementById('json-editor'), {
   mode: { name: 'javascript', json: true },
@@ -14,6 +34,8 @@ const jsonEditor = CodeMirror(document.getElementById('json-editor'), {
   indentWithTabs: true,
   lineNumbers: true,
   autoCloseBrackets: true,
+  gutters: ['CodeMirror-lint-markers'],
+  lint: true,
 });
 const amlEditor = CodeMirror(document.getElementById('aml-editor'), {
   lineNumbers: true,
