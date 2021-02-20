@@ -1,6 +1,7 @@
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/javascript/javascript.js';
 import 'codemirror/addon/edit/closebrackets.js';
+import 'codemirror/addon/comment/comment.js';
 import 'codemirror/addon/lint/lint.js';
 import 'codemirror/addon/lint/lint.css';
 import { parse as json5_parse } from 'json5';
@@ -41,14 +42,16 @@ CodeMirror.registerHelper('lint', 'json', function lintJson(text) {
 });
 
 const jsonEditor = CodeMirror(document.getElementById('json-editor'), {
-  mode: 'application/json',
+  mode: 'javascript', // Why not to use 'application/json'? Because it will disable the comment key.
   value: `{\n\tkey: 'value',\n\tobject: {\n\t\tkey: 'value',\n\t\tsubObject: {},\n\t\tarray: [\n\t\t\t{\n\t\t\t\tsubArray: []\n\t\t\t}\n\t\t]\n\t},\n\tarrayOfStrings: [\n\t\t'value1',\n\t\t'value2'\n\t],\n\tarrayOfObjects: [\n\t\t{\n\t\t\tkey1: 'value1',\n\t\t\tkey2: 'value2'\n\t\t},\n\t\t{\n\t\t\tkey1: 'value1',\n\t\t\tkey2: 'value2'\n\t\t}\n\t],\n\tfreeformArray: [\n\t\t{\n\t\t\ttype: 'name',\n\t\t\tvalue: 'value1'\n\t\t},\n\t\t{\n\t\t\ttype: 'text',\n\t\t\tvalue: 'value2'\n\t\t}\n\t]\n}\n`,
   tabSize: 2,
   indentWithTabs: true,
   lineNumbers: true,
   autoCloseBrackets: true,
   gutters: ['CodeMirror-lint-markers'],
-  lint: true,
+  lint: {
+    getAnnotations: CodeMirror.lint.json,
+  },
 });
 const amlEditor = CodeMirror(document.getElementById('aml-editor'), {
   lineNumbers: true,
@@ -61,6 +64,7 @@ jsonEditor.on('change', function handleChange() {
 });
 
 setAmlEditorValue();
+setCommentKey();
 
 function setAmlEditorValue() {
   try {
@@ -69,6 +73,18 @@ function setAmlEditorValue() {
   } catch {
     amlEditor.setValue('');
   }
+}
+
+function setCommentKey() {
+  const { keyMap } = CodeMirror;
+  const isMac = keyMap.default == keyMap.macDefault;
+  const commentKey = isMac ? 'Cmd-/' : 'Ctrl-/';
+
+  jsonEditor.setOption('extraKeys', {
+    [commentKey](cm) {
+      cm.toggleComment({ indent: true });
+    },
+  });
 }
 
 const copyBtn = document.getElementById('copy');
