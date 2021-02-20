@@ -20,6 +20,14 @@ function toAml(object = {}) {
     }
 
     if (isArray(root)) {
+      if (isArray(parent)) {
+        throw new TypeError(
+          `ArchieML does not support array of arrays: ${JSON.stringify([
+            root,
+          ])}.`
+        );
+      }
+
       let result = '';
       const isFreeformType = checkFreeformType(root);
 
