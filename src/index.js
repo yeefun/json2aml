@@ -50,8 +50,12 @@ jsonEditor.on('change', function handleChange() {
 setAmlEditorValue();
 
 function setAmlEditorValue() {
-  const object = json5Parse(jsonEditor.getValue());
-  amlEditor.setValue(toAml(object));
+  try {
+    const object = json5Parse(jsonEditor.getValue());
+    amlEditor.setValue(toAml(object));
+  } catch {
+    amlEditor.setValue('');
+  }
 }
 
 const copyBtn = document.getElementById('copy');

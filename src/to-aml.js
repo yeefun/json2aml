@@ -118,7 +118,7 @@ function toAml(object = {}) {
       }
 
       if (!parent) {
-        return result !== '' ? result : '{}';
+        return result;
       }
 
       if (isEmptyObject(root)) {
