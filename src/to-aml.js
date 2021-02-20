@@ -1,11 +1,20 @@
-function toAml(object = {}) {
+function toAml(object = {}, { shouldReturnWarnings = false } = {}) {
   const firstArrayInOutermostKey = {
     wasIterated: false,
     wasSet: false,
   };
+  const warnings = [];
 
   function build(root = {}, parent, nestedKeys = [], isFreeformType = false) {
-    if (isString(root)) {
+    if (isLiteral(root)) {
+      if (!isString(root)) {
+        const message = `[json2aml warn]: ArchieML always stores values in the output as strings. A ${capitalize(
+          typeof root
+        )} ${root} is converted to a String "${String(root)}".`;
+        console.warn(message);
+        warnings.push(message);
+      }
+
       if (isArray(parent)) {
         return {
           tag: 'string',
@@ -20,6 +29,14 @@ function toAml(object = {}) {
     }
 
     if (isArray(root)) {
+      if (isArray(parent)) {
+        throw new TypeError(
+          `[json2aml error] ArchieML does not support array of arrays: ${JSON.stringify(
+            [root]
+          )}.`
+        );
+      }
+
       let result = '';
       const isFreeformType = checkFreeformType(root);
 
@@ -34,7 +51,7 @@ function toAml(object = {}) {
 
       for (const elem of root) {
         let output;
-        if (checkFreeformType(elem.value)) {
+        if (isObject(elem) && checkFreeformType(elem.value)) {
           ({ output } = build(elem, root, [elem.type], isFreeformType));
         } else {
           ({ output } = build(elem, root, [], isFreeformType));
@@ -65,7 +82,7 @@ function toAml(object = {}) {
 
         let result = '';
 
-        if (isString(root.value)) {
+        if (isLiteral(root.value)) {
           result += `${root.type}: ${root.value}\n`;
         } else {
           const isValueArray = isArray(root.value);
@@ -118,7 +135,7 @@ function toAml(object = {}) {
       }
 
       if (!parent) {
-        return result !== '' ? result : '{}';
+        return result;
       }
 
       if (isEmptyObject(root)) {
@@ -135,6 +152,10 @@ function toAml(object = {}) {
     }
   }
 
+  if (shouldReturnWarnings) {
+    return [build(object), warnings];
+  }
+
   return build(object);
 }
 
@@ -142,11 +163,15 @@ function checkFreeformType(elem = []) {
   return (
     isArray(elem) &&
     elem.length > 0 &&
-    elem.every(function (object = {}) {
+    elem.every(function (item = {}) {
+      if (!isObject(item)) {
+        return false;
+      }
+
       return (
-        Object.prototype.hasOwnProperty.call(object, 'type') &&
-        Object.prototype.hasOwnProperty.call(object, 'value') &&
-        Object.keys(object).length === 2
+        Object.prototype.hasOwnProperty.call(item, 'type') &&
+        Object.prototype.hasOwnProperty.call(item, 'value') &&
+        Object.keys(item).length === 2
       );
     })
   );
@@ -164,8 +189,16 @@ function isString(elem) {
   return typeof elem === 'string';
 }
 
+function isLiteral(elem) {
+  return !isObject(elem) && !isArray(elem);
+}
+
 function isEmptyObject(elem) {
   return isObject(elem) && Object.keys(elem).length <= 0;
+}
+
+function capitalize(str = '') {
+  return `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
 }
 
 export default toAml;

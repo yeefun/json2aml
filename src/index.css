@@ -1,12 +1,21 @@
 @import 'reset-css';
 @import 'codemirror/lib/codemirror.css';
 
+html[data-theme='dark'] {
+  --background-color: #202020;
+  --text-color: #fff;
+}
+html[data-theme='light'] {
+  --background-color: #fff;
+  --text-color: #202020;
+}
+
 body {
-  line-height: 1.5;
+  line-height: 1.4;
   font-size: 16px;
   font-family: 'Inconsolata', monospace;
-  color: #fff;
-  background-color: #202020;
+  color: var(--text-color);
+  background-color: var(--background-color);
   padding: 0 24px;
 }
 
@@ -23,6 +32,7 @@ body {
   display: flex;
   align-items: center;
   max-width: 1000px;
+  height: 80vh;
   margin: 0 auto;
   position: relative;
   border-radius: 2px;
@@ -31,6 +41,7 @@ body {
 button {
   cursor: pointer;
   font-family: inherit;
+  color: inherit;
   font-size: inherit;
 }
 
@@ -38,10 +49,12 @@ button {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
+  color: #202020;
 }
 
 .editor {
   width: 50%;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -54,8 +67,42 @@ button {
 }
 
 .CodeMirror {
-  height: 80vh;
   font-family: 'Inconsolata', monospace;
+  height: 100%;
+}
+
+.CodeMirror-lint-tooltip {
+  font-family: 'Inconsolata', monospace;
+}
+
+.CodeMirror-lint-marker-warning,
+.CodeMirror-lint-marker-error {
+  position: fixed;
+}
+
+#theme {
+  position: absolute;
+  top: 24px;
+  right: 48px;
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  padding: 0;
+}
+.sun {
+  display: block;
+}
+.moon {
+  display: none;
+}
+
+html[data-theme='light'] .sun {
+  display: none;
+}
+html[data-theme='light'] .moon {
+  display: block;
 }
 
 a {
@@ -70,5 +117,5 @@ footer {
 }
 
 footer a {
-  color: #fff;
+  color: var(--text-color);
 }
