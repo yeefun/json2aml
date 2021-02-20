@@ -34,7 +34,7 @@ function toAml(object = {}) {
 
       for (const elem of root) {
         let output;
-        if (checkFreeformType(elem.value)) {
+        if (isObject(elem) && checkFreeformType(elem.value)) {
           ({ output } = build(elem, root, [elem.type], isFreeformType));
         } else {
           ({ output } = build(elem, root, [], isFreeformType));
