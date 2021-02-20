@@ -1,6 +1,6 @@
 {
   "name": "json2aml",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Convert JSON to ArchieML online.",
   "author": "Yeefun Lin <szyeefun@gmail.com> (https://yeefun.github.io/)",
   "scripts": {
