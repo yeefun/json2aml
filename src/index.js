@@ -2,6 +2,9 @@ import CodeMirror from 'codemirror';
 import 'codemirror/mode/javascript/javascript.js';
 import 'codemirror/addon/edit/closebrackets.js';
 import 'codemirror/addon/comment/comment.js';
+import 'codemirror/addon/fold/foldgutter.js';
+import 'codemirror/addon/fold/brace-fold.js';
+import 'codemirror/addon/fold/foldgutter.css';
 import 'codemirror/addon/lint/lint.js';
 import 'codemirror/addon/lint/lint.css';
 import 'codemirror/theme/material-darker.css';
@@ -49,7 +52,8 @@ const jsonEditor = CodeMirror(document.getElementById('json-editor'), {
   indentWithTabs: true,
   lineNumbers: true,
   autoCloseBrackets: true,
-  gutters: ['CodeMirror-lint-markers'],
+  foldGutter: true,
+  gutters: ['CodeMirror-lint-markers', 'CodeMirror-foldgutter'],
   lint: {
     getAnnotations: CodeMirror.lint.json,
   },
