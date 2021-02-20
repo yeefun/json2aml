@@ -142,11 +142,15 @@ function checkFreeformType(elem = []) {
   return (
     isArray(elem) &&
     elem.length > 0 &&
-    elem.every(function (object = {}) {
+    elem.every(function (item = {}) {
+      if (!isObject(item)) {
+        return false;
+      }
+
       return (
-        Object.prototype.hasOwnProperty.call(object, 'type') &&
-        Object.prototype.hasOwnProperty.call(object, 'value') &&
-        Object.keys(object).length === 2
+        Object.prototype.hasOwnProperty.call(item, 'type') &&
+        Object.prototype.hasOwnProperty.call(item, 'value') &&
+        Object.keys(item).length === 2
       );
     })
   );
