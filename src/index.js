@@ -4,6 +4,7 @@ import 'codemirror/addon/edit/closebrackets.js';
 import 'codemirror/addon/comment/comment.js';
 import 'codemirror/addon/lint/lint.js';
 import 'codemirror/addon/lint/lint.css';
+import 'codemirror/theme/material-darker.css';
 import { parse as json5_parse } from 'json5';
 import clipboardCopy from 'clipboard-copy';
 
@@ -56,7 +57,6 @@ const jsonEditor = CodeMirror(document.getElementById('json-editor'), {
 const amlEditor = CodeMirror(document.getElementById('aml-editor'), {
   lineNumbers: true,
   readOnly: true,
-  theme: '',
 });
 
 jsonEditor.on('change', function handleChange() {
@@ -65,6 +65,7 @@ jsonEditor.on('change', function handleChange() {
 
 setAmlEditorValue();
 setCommentKey();
+handleToggleTheme();
 
 function setAmlEditorValue() {
   try {
@@ -91,3 +92,15 @@ const copyBtn = document.getElementById('copy');
 copyBtn.addEventListener('click', function handleClick() {
   clipboardCopy(amlEditor.getValue());
 });
+
+function handleToggleTheme() {
+  const themeBtn = document.getElementById('theme');
+  themeBtn.addEventListener('click', function handleClick() {
+    const { dataset } = document.documentElement;
+    const isDarkTheme = dataset.theme === 'dark';
+    dataset.theme = isDarkTheme ? 'light' : 'dark';
+    [jsonEditor, amlEditor].forEach(function setTheme(editor) {
+      editor.setOption('theme', isDarkTheme ? 'material-darker' : 'default');
+    });
+  });
+}
