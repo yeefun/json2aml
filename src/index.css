@@ -64,6 +64,11 @@ button {
   font-family: 'Inconsolata', monospace;
 }
 
+.CodeMirror-lint-marker-warning,
+.CodeMirror-lint-marker-error {
+  position: fixed;
+}
+
 a {
   cursor: pointer;
 }
