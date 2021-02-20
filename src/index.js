@@ -3,7 +3,7 @@ import 'codemirror/mode/javascript/javascript.js';
 import 'codemirror/addon/edit/closebrackets.js';
 import 'codemirror/addon/lint/lint.js';
 import 'codemirror/addon/lint/lint.css';
-import { parse as json5Parse } from 'json5';
+import { parse as json5_parse } from 'json5';
 import clipboardCopy from 'clipboard-copy';
 
 import './index.css';
@@ -13,7 +13,7 @@ CodeMirror.registerHelper('lint', 'json', function lintJson(text) {
   const found = [];
 
   try {
-    const object = json5Parse(text);
+    const object = json5_parse(text);
     toAml(object);
   } catch (err) {
     console.error(err);
@@ -51,7 +51,7 @@ setAmlEditorValue();
 
 function setAmlEditorValue() {
   try {
-    const object = json5Parse(jsonEditor.getValue());
+    const object = json5_parse(jsonEditor.getValue());
     amlEditor.setValue(toAml(object));
   } catch {
     amlEditor.setValue('');
