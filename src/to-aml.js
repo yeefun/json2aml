@@ -5,7 +5,7 @@ function toAml(object = {}) {
   };
 
   function build(root = {}, parent, nestedKeys = [], isFreeformType = false) {
-    if (isString(root)) {
+    if (isLiteral(root)) {
       if (isArray(parent)) {
         return {
           tag: 'string',
@@ -65,7 +65,7 @@ function toAml(object = {}) {
 
         let result = '';
 
-        if (isString(root.value)) {
+        if (isLiteral(root.value)) {
           result += `${root.type}: ${root.value}\n`;
         } else {
           const isValueArray = isArray(root.value);
@@ -160,8 +160,8 @@ function isArray(elem) {
   return Array.isArray(elem);
 }
 
-function isString(elem) {
-  return typeof elem === 'string';
+function isLiteral(elem) {
+  return !isObject(elem) && !isArray(elem);
 }
 
 function isEmptyObject(elem) {
