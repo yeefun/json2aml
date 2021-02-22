@@ -14,8 +14,11 @@ import clipboardCopy from 'clipboard-copy';
 import './index.css';
 import toAml from './to-aml.js';
 
+const STORAGE_KEY = 'jsonToAml';
+
 registerJsonLinter();
-const [jsonEditor, amlEditor] = initEditors();
+const jsonEditorValue = getJsonEditorValueFromStorage();
+const [jsonEditor, amlEditor] = initEditors(jsonEditorValue);
 listenJsonEditorChange();
 setValueToAmlEditor();
 handleCopyAml();
@@ -54,14 +57,16 @@ function registerJsonLinter() {
   });
 }
 
-function initEditors() {
+function initEditors(jsonEditorValue) {
   const { keyMap } = CodeMirror;
   const isMac = keyMap.default == keyMap.macDefault;
   const commentKey = isMac ? 'Cmd-/' : 'Ctrl-/';
 
   const jsonEditor = CodeMirror(document.getElementById('json-editor'), {
     mode: 'javascript', // Why not to use 'application/json'? Because it will disable the comment key.
-    value: `{\n\tkey: 'value',\n\tobject: {\n\t\tkey: 'value',\n\t\tsubObject: {},\n\t\tarray: [\n\t\t\t{\n\t\t\t\tsubArray: []\n\t\t\t}\n\t\t]\n\t},\n\tarrayOfStrings: [\n\t\t'value1',\n\t\t'value2'\n\t],\n\tarrayOfObjects: [\n\t\t{\n\t\t\tkey1: 'value1',\n\t\t\tkey2: 'value2'\n\t\t},\n\t\t{\n\t\t\tkey1: 'value1',\n\t\t\tkey2: 'value2'\n\t\t}\n\t],\n\tfreeformArray: [\n\t\t{\n\t\t\ttype: 'name',\n\t\t\tvalue: 'value1'\n\t\t},\n\t\t{\n\t\t\ttype: 'text',\n\t\t\tvalue: 'value2'\n\t\t}\n\t]\n}\n`,
+    value:
+      jsonEditorValue ||
+      `{\n\tkey: 'value',\n\tobject: {\n\t\tkey: 'value',\n\t\tsubObject: {},\n\t\tarray: [\n\t\t\t{\n\t\t\t\tsubArray: []\n\t\t\t}\n\t\t]\n\t},\n\tarrayOfStrings: [\n\t\t'value1',\n\t\t'value2'\n\t],\n\tarrayOfObjects: [\n\t\t{\n\t\t\tkey1: 'value1',\n\t\t\tkey2: 'value2'\n\t\t},\n\t\t{\n\t\t\tkey1: 'value1',\n\t\t\tkey2: 'value2'\n\t\t}\n\t],\n\tfreeformArray: [\n\t\t{\n\t\t\ttype: 'name',\n\t\t\tvalue: 'value1'\n\t\t},\n\t\t{\n\t\t\ttype: 'text',\n\t\t\tvalue: 'value2'\n\t\t}\n\t]\n}\n`,
     tabSize: 2,
     indentWithTabs: true,
     lineNumbers: true,
@@ -88,6 +93,7 @@ function initEditors() {
 function listenJsonEditorChange() {
   jsonEditor.on('change', function handleChange() {
     setValueToAmlEditor();
+    saveJsonEditorValueToStorage(jsonEditor.getValue());
   });
 }
 
@@ -117,4 +123,16 @@ function handleToggleTheme() {
       editor.setOption('theme', isDarkTheme ? 'material-darker' : 'default');
     });
   });
+}
+
+function getJsonEditorValueFromStorage() {
+  return window.localStorage.getItem(STORAGE_KEY);
+}
+
+function saveJsonEditorValueToStorage(str = '') {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, str);
+  } catch (err) {
+    console.error(err);
+  }
 }
