@@ -11,9 +11,9 @@ html[data-theme='light'] {
 }
 
 body {
-  line-height: 1.4;
-  font-size: 16px;
-  font-family: 'Inconsolata', monospace;
+  line-height: 1.5;
+  font-size: 13px;
+  font-family: 'Fira Code', monospace;
   color: var(--text-color);
   background-color: var(--background-color);
   padding: 0 24px;
@@ -67,12 +67,12 @@ button {
 }
 
 .CodeMirror {
-  font-family: 'Inconsolata', monospace;
+  font-family: 'Fira Code', monospace;
   height: 100%;
 }
 
 .CodeMirror-lint-tooltip {
-  font-family: 'Inconsolata', monospace;
+  font-family: 'Fira Code', monospace;
 }
 
 .CodeMirror-lint-marker-warning,
