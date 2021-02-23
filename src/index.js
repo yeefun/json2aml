@@ -114,14 +114,14 @@ function setValueToAmlEditor() {
 
 function handleCopyAml() {
   const copyBtn = document.getElementById('copy');
-  copyBtn.addEventListener('click', function handleClick() {
+  copyBtn.addEventListener('click', function copyAml() {
     clipboardCopy(amlEditor.getValue());
   });
 }
 
 function handleToggleTheme() {
   const themeBtn = document.getElementById('theme');
-  themeBtn.addEventListener('click', function handleClick() {
+  themeBtn.addEventListener('click', function toggleTheme() {
     const { dataset } = document.documentElement;
     const isDarkTheme = dataset.theme === 'dark';
     dataset.theme = isDarkTheme ? 'light' : 'dark';
