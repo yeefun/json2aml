@@ -63,7 +63,7 @@ function initEditors(jsonEditorValue) {
   const commentKey = isMac ? 'Cmd-/' : 'Ctrl-/';
 
   const jsonEditor = CodeMirror(document.getElementById('json-editor'), {
-    mode: 'javascript', // Why not to use 'application/json'? Because it will disable the comment key.
+    mode: 'application/json',
     value:
       jsonEditorValue ||
       `{\n\tkey: 'value',\n\tobject: {\n\t\tkey: 'value',\n\t\tsubObject: {},\n\t\tarray: [\n\t\t\t{\n\t\t\t\tsubArray: []\n\t\t\t}\n\t\t]\n\t},\n\tarrayOfStrings: [\n\t\t'value1',\n\t\t'value2'\n\t],\n\tarrayOfObjects: [\n\t\t{\n\t\t\tkey1: 'value1',\n\t\t\tkey2: 'value2'\n\t\t},\n\t\t{\n\t\t\tkey1: 'value1',\n\t\t\tkey2: 'value2'\n\t\t}\n\t],\n\tfreeformArray: [\n\t\t{\n\t\t\ttype: 'name',\n\t\t\tvalue: 'value1'\n\t\t},\n\t\t{\n\t\t\ttype: 'text',\n\t\t\tvalue: 'value2'\n\t\t}\n\t]\n}\n`,
@@ -75,7 +75,13 @@ function initEditors(jsonEditorValue) {
     gutters: ['CodeMirror-lint-markers', 'CodeMirror-foldgutter'],
     extraKeys: {
       [commentKey](cm) {
-        cm.toggleComment({ indent: true });
+        cm.toggleComment({
+          indent: true,
+          blockCommentStart: '/*',
+          blockCommentEnd: '*/',
+          blockCommentContinue: ' * ',
+          lineComment: '//',
+        });
       },
     },
     lint: {
